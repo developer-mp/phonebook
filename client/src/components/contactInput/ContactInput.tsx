@@ -7,16 +7,24 @@ interface IContactInput {
   onCloseModal: () => void;
   initialName: string;
   initialPhone: string;
+  initialMail: string;
+  initialAddress: string;
 }
 
 const ContactInput: React.FC<IContactInput> = ({
   onCloseModal,
   initialName,
   initialPhone,
+  initialMail,
+  initialAddress,
 }) => {
   const [name, setName] = useState<string>(initialName || "");
   const [phone, setPhone] = useState<string>(initialPhone || "");
+  const [mail, setMail] = useState<string>(initialMail || "");
+  const [address, setAddress] = useState<string>(initialAddress || "");
   const [isSaveDisabled, setIsSaveDisabled] = useState<boolean>(true);
+  const isNewRecord =
+    !initialName && !initialPhone && !initialMail && !initialAddress;
 
   useEffect(() => {
     updateSaveDisabledState(name, phone);
@@ -27,7 +35,16 @@ const ContactInput: React.FC<IContactInput> = ({
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(e.target.value);
+    const formattedPhone = formatPhone(e.target.value);
+    setPhone(formattedPhone);
+  };
+
+  const handleMailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMail(e.target.value);
+  };
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
   };
 
   const updateSaveDisabledState = (name: string, phone: string) => {
@@ -43,10 +60,23 @@ const ContactInput: React.FC<IContactInput> = ({
     handleClose();
   };
 
+  const formatPhone = (phone: string) => {
+    const cleanedPhone = phone.replace(/\D/g, "");
+    const formattedPhone =
+      cleanedPhone.slice(0, 3) +
+      "-" +
+      cleanedPhone.slice(3, 5) +
+      "-" +
+      cleanedPhone.slice(5, 7);
+    return formattedPhone;
+  };
+
   return (
     <Modal show={true} onHide={onCloseModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Add a new contact</Modal.Title>
+        <Modal.Title>
+          {isNewRecord ? "Add new contact" : "Edit contact"}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -76,11 +106,21 @@ const ContactInput: React.FC<IContactInput> = ({
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
             <Form.Label>Email</Form.Label>
-            <Form.Control type="email" autoFocus />
+            <Form.Control
+              type="email"
+              autoFocus
+              value={mail}
+              onChange={handleMailChange}
+            />
           </Form.Group>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput">
             <Form.Label>Address</Form.Label>
-            <Form.Control type="text" autoFocus />
+            <Form.Control
+              type="text"
+              autoFocus
+              value={address}
+              onChange={handleAddressChange}
+            />
           </Form.Group>
         </Form>
       </Modal.Body>
