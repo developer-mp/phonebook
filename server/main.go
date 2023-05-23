@@ -15,9 +15,9 @@ import (
 )
 
 func routes(app *fiber.App) {
+	app.Get("/api/health", contact.Healthcheck)
 	app.Get("/api/contact", contact.GetContacts)
-	app.Get("/api/contact/:id", contact.GetContact)
-	app.Get("/api/healthcheck", contact.Healthcheck)
+	app.Put("/api/contact/:id", contact.UpdateContact)
 	app.Post("/api/contact", contact.NewContact)
 	app.Delete("/api/contact/:id", contact.DeleteContact)
 }

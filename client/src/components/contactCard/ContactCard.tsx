@@ -8,19 +8,17 @@ import {
 } from "react-icons/ai";
 import IconBox from "../iconBox/IconBox";
 import ContactInput from "../contactInput/ContactInput";
+import { type IContactCard } from "./../../interface/ContactCard";
+import { mutate } from "swr";
 
-interface IContactCard {
-  name: string;
-  phone: string;
-  mail: string;
-  address: string;
-}
+const ENDPOINT = "http://localhost:4000";
 
 const ContactCard: React.FC<IContactCard> = ({
-  name = "Kevin",
-  phone = "222222",
-  mail = "kevin@gmail.com",
-  address = "1 St",
+  name,
+  phone,
+  mail,
+  address,
+  ID,
 }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
 
@@ -31,8 +29,28 @@ const ContactCard: React.FC<IContactCard> = ({
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  const handleDelete = async () => {
+    try {
+      const endpoint = `${ENDPOINT}/api/contact/${ID}`;
+
+      const response = await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        mutate("api/contact");
+      }
+    } catch (error) {
+      console.error("Error deleting contact: ", error);
+    }
+  };
+
   return (
-    <div className="bg-white p-2 rounded-md border border-gray-300 flex items-center justify-between">
+    <div className="bg-white p-2 rounded-md border border-gray-300 flex items-center justify-between mb-1">
       <div className="text-left">
         <div className="font-bold">{name}</div>
         <div className="flex items-center text-xs text-gray-500 mt-1">
@@ -52,7 +70,9 @@ const ContactCard: React.FC<IContactCard> = ({
         <div onClick={handleShowModal}>
           <IconBox icon={AiOutlineEdit} />
         </div>
-        <IconBox icon={AiOutlineDelete} />
+        <div onClick={handleDelete}>
+          <IconBox icon={AiOutlineDelete} />
+        </div>
       </div>
       {showModal && (
         <ContactInput
@@ -61,6 +81,7 @@ const ContactCard: React.FC<IContactCard> = ({
           initialPhone={phone}
           initialMail={mail}
           initialAddress={address}
+          contactId={ID}
         />
       )}
     </div>

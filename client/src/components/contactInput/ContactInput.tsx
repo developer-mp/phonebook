@@ -2,14 +2,10 @@ import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import { type IContactInput } from "./../../interface/ContactInput";
+import { mutate } from "swr";
 
-interface IContactInput {
-  onCloseModal: () => void;
-  initialName: string;
-  initialPhone: string;
-  initialMail: string;
-  initialAddress: string;
-}
+const ENDPOINT = "http://localhost:4000";
 
 const ContactInput: React.FC<IContactInput> = ({
   onCloseModal,
@@ -17,6 +13,7 @@ const ContactInput: React.FC<IContactInput> = ({
   initialPhone,
   initialMail,
   initialAddress,
+  contactId,
 }) => {
   const [name, setName] = useState<string>(initialName || "");
   const [phone, setPhone] = useState<string>(initialPhone || "");
@@ -56,8 +53,28 @@ const ContactInput: React.FC<IContactInput> = ({
     onCloseModal();
   };
 
-  const handleSave = () => {
-    handleClose();
+  const handleClick = async () => {
+    try {
+      const endpoint = isNewRecord
+        ? `${ENDPOINT}/api/contact`
+        : `${ENDPOINT}/api/contact/${contactId}`;
+      const method = isNewRecord ? "POST" : "PUT";
+
+      const response = await fetch(endpoint, {
+        method,
+        body: JSON.stringify({ name, phone, mail, address }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        handleClose();
+        mutate("api/contact");
+      }
+    } catch (error) {
+      console.error("Error saving contact: ", error);
+    }
   };
 
   const formatPhone = (phone: string) => {
@@ -130,7 +147,7 @@ const ContactInput: React.FC<IContactInput> = ({
         </Button>
         <Button
           variant="primary"
-          onClick={handleClose}
+          onClick={handleClick}
           disabled={isSaveDisabled}
         >
           Save
