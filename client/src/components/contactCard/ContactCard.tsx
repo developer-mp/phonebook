@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { mutate } from "swr";
 import {
   AiOutlinePhone,
   AiOutlineMail,
@@ -9,7 +10,8 @@ import {
 import IconBox from "../iconBox/IconBox";
 import ContactInput from "../contactInput/ContactInput";
 import { type IContactCard } from "./../../interface/ContactCard";
-import { useDeleteContact } from "../../utils/Api";
+
+const SERVER_API_KEY = import.meta.env.VITE_SERVER_API_KEY;
 
 const ContactCard: React.FC<IContactCard> = ({
   name,
@@ -28,28 +30,24 @@ const ContactCard: React.FC<IContactCard> = ({
     setShowModal(false);
   };
 
-  // const deleteContact = useDeleteContact();
+  const handleDelete = async () => {
+    try {
+      const endpoint = `${SERVER_API_KEY}/api/contact/${ID}`;
 
-  const handleDelete = useDeleteContact();
+      const response = await fetch(endpoint, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  // const handleDelete = async () => {
-  //   try {
-  //     const endpoint = `${ENDPOINT}/api/contact/${ID}`;
-
-  //     const response = await fetch(endpoint, {
-  //       method: "DELETE",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //     });
-
-  //     if (response.ok) {
-  //       mutate("api/contact");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error deleting contact: ", error);
-  //   }
-  // };
+      if (response.ok) {
+        mutate("api/contact");
+      }
+    } catch (error) {
+      console.error("Error deleting contact: ", error);
+    }
+  };
 
   return (
     <div className="bg-white p-2 rounded-md border border-gray-300 flex items-center justify-between mb-1">

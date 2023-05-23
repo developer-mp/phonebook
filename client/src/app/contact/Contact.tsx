@@ -1,13 +1,13 @@
 import { useState } from "react";
+import useSWR from "swr";
 import ContactCard from "../../components/contactCard/ContactCard";
 import ContactInput from "../../components/contactInput/ContactInput";
-import useSWR from "swr";
 import { type IContactCard } from "./../../interface/ContactCard";
 
-const ENDPOINT = "http://localhost:4000";
+const SERVER_API_KEY = import.meta.env.VITE_SERVER_API_KEY;
 
 const fetcher = (url: string) =>
-  fetch(`${ENDPOINT}/${url}`).then((res) => res.json());
+  fetch(`${SERVER_API_KEY}/${url}`).then((res) => res.json());
 
 const Contact: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);

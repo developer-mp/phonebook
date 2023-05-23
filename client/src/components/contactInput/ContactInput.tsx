@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
+import { mutate } from "swr";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { type IContactInput } from "./../../interface/ContactInput";
-import { mutate } from "swr";
 
-const ENDPOINT = "http://localhost:4000";
+const SERVER_API_KEY = import.meta.env.VITE_SERVER_API_KEY;
 
 const ContactInput: React.FC<IContactInput> = ({
   onCloseModal,
@@ -56,8 +56,8 @@ const ContactInput: React.FC<IContactInput> = ({
   const handleClick = async () => {
     try {
       const endpoint = isNewRecord
-        ? `${ENDPOINT}/api/contact`
-        : `${ENDPOINT}/api/contact/${contactId}`;
+        ? `${SERVER_API_KEY}/api/contact`
+        : `${SERVER_API_KEY}/api/contact/${contactId}`;
       const method = isNewRecord ? "POST" : "PUT";
 
       const response = await fetch(endpoint, {
