@@ -9,9 +9,7 @@ import {
 import IconBox from "../iconBox/IconBox";
 import ContactInput from "../contactInput/ContactInput";
 import { type IContactCard } from "./../../interface/ContactCard";
-import { mutate } from "swr";
-
-const ENDPOINT = "http://localhost:4000";
+import { useDeleteContact } from "../../utils/Api";
 
 const ContactCard: React.FC<IContactCard> = ({
   name,
@@ -30,24 +28,28 @@ const ContactCard: React.FC<IContactCard> = ({
     setShowModal(false);
   };
 
-  const handleDelete = async () => {
-    try {
-      const endpoint = `${ENDPOINT}/api/contact/${ID}`;
+  // const deleteContact = useDeleteContact();
 
-      const response = await fetch(endpoint, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+  const handleDelete = useDeleteContact();
 
-      if (response.ok) {
-        mutate("api/contact");
-      }
-    } catch (error) {
-      console.error("Error deleting contact: ", error);
-    }
-  };
+  // const handleDelete = async () => {
+  //   try {
+  //     const endpoint = `${ENDPOINT}/api/contact/${ID}`;
+
+  //     const response = await fetch(endpoint, {
+  //       method: "DELETE",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     });
+
+  //     if (response.ok) {
+  //       mutate("api/contact");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting contact: ", error);
+  //   }
+  // };
 
   return (
     <div className="bg-white p-2 rounded-md border border-gray-300 flex items-center justify-between mb-1">
