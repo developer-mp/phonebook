@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { mutate } from "swr";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 import { type IContactInput } from "./../../interface/ContactInput";
-
-const SERVER_API_KEY = import.meta.env.VITE_SERVER_API_KEY;
+import { formatPhone } from "../../utils/formatPhone";
+import saveContact from "../../api/saveContact";
 
 const ContactInput: React.FC<IContactInput> = ({
   onCloseModal,
@@ -53,39 +52,8 @@ const ContactInput: React.FC<IContactInput> = ({
     onCloseModal();
   };
 
-  const handleClick = async () => {
-    try {
-      const endpoint = isNewRecord
-        ? `${SERVER_API_KEY}/api/contact`
-        : `${SERVER_API_KEY}/api/contact/${contactId}`;
-      const method = isNewRecord ? "POST" : "PUT";
-
-      const response = await fetch(endpoint, {
-        method,
-        body: JSON.stringify({ name, phone, mail, address }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        handleClose();
-        mutate("api/contact");
-      }
-    } catch (error) {
-      console.error("Error saving contact: ", error);
-    }
-  };
-
-  const formatPhone = (phone: string) => {
-    const cleanedPhone = phone.replace(/\D/g, "");
-    const formattedPhone =
-      cleanedPhone.slice(0, 3) +
-      "-" +
-      cleanedPhone.slice(3, 5) +
-      "-" +
-      cleanedPhone.slice(5, 7);
-    return formattedPhone;
+  const handleSave = async () => {
+    await saveContact(name, phone, mail, address, contactId, onCloseModal);
   };
 
   return (
@@ -147,7 +115,7 @@ const ContactInput: React.FC<IContactInput> = ({
         </Button>
         <Button
           variant="primary"
-          onClick={handleClick}
+          onClick={handleSave}
           disabled={isSaveDisabled}
         >
           Save

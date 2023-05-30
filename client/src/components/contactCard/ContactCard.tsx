@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { mutate } from "swr";
 import {
   AiOutlinePhone,
   AiOutlineMail,
@@ -10,8 +9,7 @@ import {
 import IconBox from "../iconBox/IconBox";
 import ContactInput from "../contactInput/ContactInput";
 import { type IContactCard } from "./../../interface/ContactCard";
-
-const SERVER_API_KEY = import.meta.env.VITE_SERVER_API_KEY;
+import deleteContact from "../../api/deleteContact";
 
 const ContactCard: React.FC<IContactCard> = ({
   name,
@@ -31,22 +29,7 @@ const ContactCard: React.FC<IContactCard> = ({
   };
 
   const handleDelete = async () => {
-    try {
-      const endpoint = `${SERVER_API_KEY}/api/contact/${ID}`;
-
-      const response = await fetch(endpoint, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        mutate("api/contact");
-      }
-    } catch (error) {
-      console.error("Error deleting contact: ", error);
-    }
+    await deleteContact(ID);
   };
 
   return (
