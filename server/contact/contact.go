@@ -1,7 +1,7 @@
 package contact
 
 import (
-	"phonebook/server/db"
+	"server/db"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/jinzhu/gorm"

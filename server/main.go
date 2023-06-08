@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 	"os"
-	"phonebook/server/db"
+	"server/db"
 
-	"phonebook/server/contact"
+	"server/contact"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
