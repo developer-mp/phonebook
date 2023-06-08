@@ -1,6 +1,6 @@
 # Phonebook
 
-Phonebook is a simple web application that allows users to store and manage their contacts efficiently.
+Phonebook is a web application that allows users to store and manage their contacts efficiently.
 
 ## Features
 
