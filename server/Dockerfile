@@ -14,6 +14,7 @@ RUN go build \
 FROM scratch
 COPY --from=build /etc/passwd /etc/passwd
 COPY --from=build /phonebook/server server
+COPY .env .env
 USER nonroot
 EXPOSE 4000
 CMD ["/server"]

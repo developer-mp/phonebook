@@ -30,13 +30,12 @@ func initDatabase() {
 		fmt.Print(e)
 	}
 	
-	host:=os.Getenv("host")
 	user := os.Getenv("user")
 	password := os.Getenv("password")
 	dbName := os.Getenv("dbName")
 	port := os.Getenv("port")
 
-	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable", host, user, password, dbName, port)
+	dsn := fmt.Sprintf("host=db user=%s password=%s dbname=%s port=%s sslmode=disable", user, password, dbName, port)
 
 	db.DBConn, err = gorm.Open("postgres", dsn)
 	if err != nil {
