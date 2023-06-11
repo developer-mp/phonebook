@@ -12,7 +12,7 @@ RUN go build \
   -o server
 
 FROM scratch
-COPY --from=build /etc/passwd /etc/passwd
+# COPY --from=build /etc/passwd /etc/passwd
 COPY --from=build /phonebook/server server
 COPY .env .env
 USER nonroot
