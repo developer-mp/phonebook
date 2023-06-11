@@ -10,4 +10,4 @@ RUN yarn build
 FROM nginxinc/nginx-unprivileged:1.23-alpine-perl
 COPY ngnix.conf /etc/nginx/conf.d/default.conf
 COPY --from=build usr/src/client/dist/ /usr/share/nginx/html
-EXPOSE 3000
+EXPOSE 8080
