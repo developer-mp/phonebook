@@ -17,10 +17,6 @@ services:
     image: postgres:alpine
     env_file:
       - server/.env
-    # environment:
-    #   - POSTGRES_USER=admin
-    #   - POSTGRES_PASSWORD=admin
-    #   - POSTGRES_DB=book
     ports:
       - "5432:5432"
     volumes:
