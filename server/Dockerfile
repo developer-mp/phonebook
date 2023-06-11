@@ -1,5 +1,5 @@
 FROM golang:1.19-bullseye as build
-WORKDIR /phonebook
+WORKDIR /server
 RUN useradd -u 1001 nonroot
 COPY go.mod go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod \
@@ -12,9 +12,8 @@ RUN go build \
   -o server
 
 FROM scratch
-# COPY --from=build /etc/passwd /etc/passwd
-COPY --from=build /phonebook/server server
-COPY .env .env
+COPY --from=build /etc/passwd /etc/passwd
+COPY --from=build /server/server server
 USER nonroot
 EXPOSE 4000
 CMD ["/server"]
