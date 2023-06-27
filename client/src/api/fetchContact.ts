@@ -1,13 +1,16 @@
 import useSWR from "swr";
 import { type IContactCard } from "../interface/ContactCard";
 
-const SERVER_API_KEY = import.meta.env.VITE_SERVER_API_KEY;
+const ENV = import.meta.env.ENV;
+const SERVER_DEV_API = import.meta.env.VITE_SERVER_DEV_API_KEY;
+const SERVER_PROD_API = import.meta.env.VITE_SERVER_PROD_API_KEY;
+const BASE_URL = ENV === "production" ? SERVER_PROD_API : SERVER_DEV_API;
 
 const fetcher = (url: string) =>
-  fetch(`${SERVER_API_KEY}/${url}`).then((res) => res.json());
+  fetch(`${BASE_URL}/${url}`).then((res) => res.json());
 
 const useFetchContacts = () => {
-  const { data } = useSWR<IContactCard[]>("api/contact", fetcher);
+  const { data } = useSWR<IContactCard[]>("contact", fetcher);
 
   return {
     contacts: data,
