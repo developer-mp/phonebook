@@ -65,6 +65,18 @@ func main() {
 
 	initDatabase()
 	routes(app)
-	app.Listen(":4000")
+	
+	serverPort := os.Getenv("serverPort")
+	if serverPort == "" {
+		serverPort = "4000"
+	}
+
+	fmt.Printf("Listening on port %s...\n", serverPort)
+
+	err := app.Listen(":" + serverPort)
+	if err != nil {
+		fmt.Printf("Failed to start the server: %s", err.Error())
+	}
+	
 	defer db.DBConn.Close()
 }
