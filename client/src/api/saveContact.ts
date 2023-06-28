@@ -1,9 +1,5 @@
 import { mutate } from "swr";
-
-const ENV = import.meta.env.ENV;
-const SERVER_DEV_API = import.meta.env.VITE_SERVER_DEV_API_KEY;
-const SERVER_PROD_API = import.meta.env.VITE_SERVER_PROD_API_KEY;
-const BASE_URL = ENV === "production" ? SERVER_PROD_API : SERVER_DEV_API;
+import { BASE_URL } from "./apiConfig";
 
 const saveContact = async (
   name: string,
@@ -16,8 +12,8 @@ const saveContact = async (
   try {
     const isNewRecord = contactId === 0;
     const endpoint = isNewRecord
-      ? `${BASE_URL}/contact`
-      : `${BASE_URL}/contact/${contactId}`;
+      ? `${BASE_URL}/api/contact`
+      : `${BASE_URL}/api/contact/${contactId}`;
     const method = isNewRecord ? "POST" : "PUT";
 
     const response = await fetch(endpoint, {
