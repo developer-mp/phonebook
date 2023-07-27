@@ -1,14 +1,14 @@
-# Phonebook
+### Phonebook
 
 Phonebook is a web application that allows users to store and manage their contacts efficiently.
 
-## Features
+### Features
 
 Users can add, view, edit, and delete contacts.
 
-## Installation
+### Installation
 
-This web application is created using React with Vite, TypeScript, Tailwind, and useSWR for the frontend, and Golang (Go) for the backend server, and PostgresSQL for the database. 
+This web application is created using React with Vite, TypeScript, Tailwind, and useSWR for the frontend, and Golang (Go) for the backend server, and PostgresSQL for the database.
 To run the application, execute the following batch files:
 
 - `c.bat` for the client
